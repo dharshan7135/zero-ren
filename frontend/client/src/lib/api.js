@@ -1,17 +1,19 @@
 import axios from 'axios';
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+export const supabase = (SUPABASE_URL && SUPABASE_KEY)
+    ? createClient(SUPABASE_URL, SUPABASE_KEY)
+    : null;
 
 export const SERVERS = [
-    { id: 'S1', url: 'http://localhost:8001' },
-    { id: 'S2', url: 'http://localhost:8002' },
-    { id: 'S3', url: 'http://localhost:8003' },
-    { id: 'S4', url: 'http://localhost:8004' },
-    { id: 'S5', url: 'http://localhost:8005' },
+    { id: 'S1', url: 'https://storage-s1.onrender.com' },
+    { id: 'S2', url: 'https://storage-s2.onrender.com' },
+    { id: 'S3', url: 'https://storage-s3.onrender.com' },
+    { id: 'S4', url: 'https://storage-s4.onrender.com' },
+    { id: 'S5', url: 'https://storage-s5.onrender.com' },
 ];
 
 export const apiClient = {
@@ -52,6 +54,10 @@ export const apiClient = {
     },
 
     async fetchLogs() {
+        if (!supabase) {
+            console.warn("Supabase client not initialized. Check your environment variables.");
+            return [];
+        }
         const { data, error } = await supabase
             .from('logs')
             .select('*')
