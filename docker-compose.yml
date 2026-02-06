@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  s1:
+    build: 
+      context: ./backend
+    environment:
+      - SERVER_NAME=S1
+      - PEERS=http://s2:8000,http://s3:8000,http://s4:8000,http://s5:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    volumes:
+      - s1_storage:/app/storage
+    ports:
+      - "8001:8000"
+
+  s2:
+    build: 
+      context: ./backend
+    environment:
+      - SERVER_NAME=S2
+      - PEERS=http://s1:8000,http://s3:8000,http://s4:8000,http://s5:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    volumes:
+      - s2_storage:/app/storage
+    ports:
+      - "8002:8000"
+
+  s3:
+    build: 
+      context: ./backend
+    environment:
+      - SERVER_NAME=S3
+      - PEERS=http://s1:8000,http://s2:8000,http://s4:8000,http://s5:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    volumes:
+      - s3_storage:/app/storage
+    ports:
+      - "8003:8000"
+
+  s4:
+    build: 
+      context: ./backend
+    environment:
+      - SERVER_NAME=S4
+      - PEERS=http://s1:8000,http://s2:8000,http://s3:8000,http://s5:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    volumes:
+      - s4_storage:/app/storage
+    ports:
+      - "8004:8000"
+
+  s5:
+    build: 
+      context: ./backend
+    environment:
+      - SERVER_NAME=S5
+      - PEERS=http://s1:8000,http://s2:8000,http://s3:8000,http://s4:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    volumes:
+      - s5_storage:/app/storage
+    ports:
+      - "8005:8000"
+
+volumes:
+  s1_storage:
+  s2_storage:
+  s3_storage:
+  s4_storage:
+  s5_storage:
